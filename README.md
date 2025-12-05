@@ -37,11 +37,77 @@ STEP 5:Normalizing the data<BR>
 STEP 6:Splitting the data into test and train<BR>
 
 ##  PROGRAM:
-TYPE YOUR CODE HERE
+~~~
+#Import libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+
+#Load dataset
+data = pd.read_csv("Churn_Modelling.csv")
+print("First 5 rows:\n", data.head())
+
+#Explore dataset
+print("\nDataset Info:\n")
+print(data.info())
+
+print("\nMissing Values:\n")
+print(data.isnull().sum())
+
+print("\nStatistical Summary:\n")
+print(data.describe())
+
+#Drop irrelevant columns
+# RowNumber, CustomerId, and Surname don't help prediction
+data = data.drop(['RowNumber','CustomerId','Surname'], axis=1)
+
+#Encode categorical variables (Geography, Gender)
+label = LabelEncoder()
+data['Geography'] = label.fit_transform(data['Geography'])
+data['Gender'] = label.fit_transform(data['Gender'])
+
+print("\nAfter Encoding:\n", data.head())
+
+#Separate features and target
+X = data.drop('Exited', axis=1).values   # features
+y = data['Exited'].values                # target
+
+#Normalize features
+scaler = MinMaxScaler()
+X_scaled = scaler.fit_transform(X)
+print("\nNormalized Features (first 5 rows):\n", X_scaled[:5])
+
+#Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.2, random_state=42
+)
+
+print("\nTraining set size:", X_train.shape)
+print("Testing set size:", X_test.shape)
+
+~~~
 
 
 ## OUTPUT:
-SHOW YOUR OUTPUT HERE
+
+<img width="733" height="469" alt="image" src="https://github.com/user-attachments/assets/9e849686-7f5c-436e-9b39-6d47419deeaf" />
+
+
+<img width="496" height="522" alt="image" src="https://github.com/user-attachments/assets/3d8256e7-6830-43b5-8612-e8618ba76014" />
+
+
+<img width="265" height="381" alt="image" src="https://github.com/user-attachments/assets/2fa44f57-3819-4d6d-a17c-5fd407a7d157" />
+
+
+<img width="769" height="684" alt="image" src="https://github.com/user-attachments/assets/a4121b6c-00f1-4d68-9754-920fc33d31bd" />
+
+
+<img width="749" height="579" alt="image" src="https://github.com/user-attachments/assets/66aee7b5-c760-45ee-a144-8839706ab2aa" />
+
+
+<img width="289" height="57" alt="image" src="https://github.com/user-attachments/assets/b1569337-dd8a-4a5d-808c-3635598e34b1" />
+
 
 
 ## RESULT:
